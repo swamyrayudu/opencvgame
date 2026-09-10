@@ -1,13 +1,15 @@
 'use client';
 
 import React from 'react';
-import { Play, Camera, MousePointer, Target, Zap, Shield } from 'lucide-react';
+import { Play, Camera, MousePointer, Target, Maximize2, Minimize2 } from 'lucide-react';
 
 interface StartScreenProps {
   isCameraStreaming: boolean;
   isCameraLoading: boolean;
   onStartCamera: () => void;
   onStartGame: () => void;
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
 }
 
 export const StartScreen: React.FC<StartScreenProps> = ({
@@ -15,10 +17,24 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   isCameraLoading,
   onStartCamera,
   onStartGame,
+  isFullscreen = false,
+  onToggleFullscreen,
 }) => {
   return (
     <div className="absolute inset-0 z-40 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-md rounded-3xl bg-slate-900 border border-white/15 p-6 sm:p-8 shadow-2xl text-center ring-1 ring-white/10">
+        {/* Fullscreen toggle icon on top right of modal */}
+        {onToggleFullscreen && (
+          <button
+            onClick={onToggleFullscreen}
+            className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/10 transition-colors"
+            title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+            aria-label="Toggle Fullscreen"
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
+        )}
+
         {/* Futuristic Glowing Emblem */}
         <div className="mx-auto flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white shadow-xl shadow-cyan-500/30 ring-4 ring-cyan-400/20 mb-4">
           <Target className="w-8 h-8" />
@@ -48,6 +64,13 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             <div>
               <strong className="text-pink-300">Combine Fingers (Thumb + Index):</strong>
               <p className="text-[11px] text-slate-400">Touch fingers together to shoot fast! Separate to stop.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <span className="text-lg">❤️</span>
+            <div>
+              <strong className="text-emerald-300">5 Lives + Green Health Drones:</strong>
+              <p className="text-[11px] text-slate-400">Shoot green + drones to heal and recover lives!</p>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
@@ -87,6 +110,17 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             >
               <Play className="w-5 h-5 fill-current" />
               <span>START GAME</span>
+            </button>
+          )}
+
+          {/* Fullscreen Button */}
+          {onToggleFullscreen && (
+            <button
+              onClick={onToggleFullscreen}
+              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-cyan-300 text-xs font-mono transition-colors"
+            >
+              {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+              <span>{isFullscreen ? 'EXIT FULLSCREEN (ESC)' : 'ENTER FULLSCREEN (F)'}</span>
             </button>
           )}
         </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { GameMetrics } from '../lib/game/types';
-import { Volume2, VolumeX, Shield, Heart, Crosshair, Target, Zap, Hand } from 'lucide-react';
+import { Volume2, VolumeX, Shield, Heart, Target, Maximize2, Minimize2 } from 'lucide-react';
 import { gameAudio } from '../lib/audio/gameAudio';
 
 interface GameHUDProps {
@@ -11,6 +11,8 @@ interface GameHUDProps {
   gestureBadge: 'IDLE' | 'AIMING' | 'SHOOTING';
   isPinching: boolean;
   onOpenDemoGuide: () => void;
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
 }
 
 export const GameHUD: React.FC<GameHUDProps> = ({
@@ -19,6 +21,8 @@ export const GameHUD: React.FC<GameHUDProps> = ({
   gestureBadge,
   isPinching,
   onOpenDemoGuide,
+  isFullscreen = false,
+  onToggleFullscreen,
 }) => {
   const [isMuted, setIsMuted] = useState<boolean>(() => gameAudio.getMuted());
 
@@ -75,6 +79,22 @@ export const GameHUD: React.FC<GameHUDProps> = ({
 
         {/* Right Header Buttons */}
         <div className="flex items-center gap-2">
+          {/* Fullscreen toggle button */}
+          {onToggleFullscreen && (
+            <button
+              onClick={onToggleFullscreen}
+              className={`p-2 rounded-xl border transition-all ${
+                isFullscreen
+                  ? 'bg-cyan-500/20 border-cyan-400/40 text-cyan-300 shadow-md shadow-cyan-500/20'
+                  : 'bg-slate-800/80 border-white/10 text-slate-300 hover:text-white hover:bg-slate-700'
+              }`}
+              title={isFullscreen ? 'Exit Fullscreen (Esc or F)' : 'Enter Fullscreen (F)'}
+              aria-label="Toggle Fullscreen"
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
+          )}
+
           {/* Audio toggle */}
           <button
             onClick={handleToggleMute}

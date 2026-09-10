@@ -8,12 +8,14 @@ interface GameCanvasProps {
   gameEngineRef: React.MutableRefObject<GameEngine | null>;
   onMetricsUpdate: (metrics: GameMetrics) => void;
   onGameOver: (metrics: GameMetrics) => void;
+  className?: string;
 }
 
 export const GameCanvas: React.FC<GameCanvasProps> = ({
   gameEngineRef,
   onMetricsUpdate,
   onGameOver,
+  className,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -105,7 +107,11 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
   }, [gameEngineRef]);
 
   return (
-    <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-white/10 shadow-2xl ring-1 ring-white/5 cursor-crosshair select-none">
+    <div
+      className={`relative rounded-2xl overflow-hidden bg-slate-950 border border-white/10 shadow-2xl ring-1 ring-white/5 cursor-crosshair select-none ${
+        className || 'w-full aspect-[4/3]'
+      }`}
+    >
       <canvas
         ref={canvasRef}
         onMouseMove={handleMouseMove}
